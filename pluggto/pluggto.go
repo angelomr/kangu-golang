@@ -57,7 +57,7 @@ func Parse(decoder *json.Decoder, r *http.Request) ParseResult {
 	}
 
 	cepOrigem := paramsPlatform.OriginPostalCode
-	tokenKangu := r.Header.Get("token")
+	tokenKangu := r.Header.Get("Token")
 	paramsKangu := MakeKangu(paramsPlatform, cepOrigem)
 
 	return ParseResult{

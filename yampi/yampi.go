@@ -59,8 +59,8 @@ func Parse(decoder *json.Decoder, r *http.Request) ParseResult {
 		panic(err3)
 	}
 
-	cepOrigem := r.Header.Get("cepOrigem")
-	tokenKangu := r.Header.Get("token")
+	cepOrigem := r.Header.Get("Ceporigem")
+	tokenKangu := r.Header.Get("Token")
 	paramsKangu := MakeKangu(paramsPlatform, cepOrigem)
 
 	return ParseResult{
