@@ -23,9 +23,8 @@ Na configuração de integração da Yampi, você deve configurar:
 - Documentação da API - Freight (Source): (https://developers.plugg.to/reference/freight-source)
 
 ### Requisitos de negócio
-Eu não tenho um acesso de Testes na PluggTo, então somente segui a ocumentação para criação da simulação de frete. Na configuração de integração da PluggTo, você deve configurar os seguintes Headers:
+Eu não tenho um acesso de Testes na PluggTo, então somente segui a documentação para criação da simulação de frete. Na configuração de integração da PluggTo, você deve configurar o Token no Header:
 - Token - Aqui você deve colocar o Token da Kangu
-- cepOrigem - Aqui você deve cadastrar o CEP da sua loja, da onde irão ser postados os pacotes.
 
 ### Importante
 Caso a PluggTo não suporte a criação de variáveis no Header, podemos alterar o código para que os dados sejam enviados através de parâmetros de URL, porém, conforme dito acima, não temos acesso a PluggTo para poder fazer um teste e verificar como isso funcionaria.
