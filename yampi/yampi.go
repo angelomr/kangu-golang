@@ -99,7 +99,6 @@ func MakeKangu(paramsPlatform Request, cepOrigem string) kangu.Api {
 		Servicos:   []string{"E", "M", "X"},
 		Produtos:   products,
 	}
-	fmt.Println(paramsKangu)
 	return paramsKangu
 }
 
@@ -117,9 +116,11 @@ func MakeResultItems(freightItems []FreightItem) []QuoteItem {
 	return resultItems
 }
 
-func MakeResult(responseBody []byte) []QuoteItem {
+func MakeResult(responseBody []byte) Result {
 	var freightItems []FreightItem
 	json.Unmarshal(responseBody, &freightItems)
 
-	return MakeResultItems(freightItems)
+	return Result{
+		Quotes: MakeResultItems(freightItems),
+	}
 }
