@@ -12,6 +12,10 @@ import (
 	"wsbrasil.com/simulate/kangu/yampi"
 )
 
+type Result struct {
+	Value any
+}
+
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		debug := r.Header.Get("Debug")
@@ -45,22 +49,33 @@ func main() {
 		decoder := json.NewDecoder(r.Body)
 
 		origem := r.Header.Get("Origem")
+		var result Result
 
 		if origem == "pluggto" {
 			paramsKangu := pluggto.Parse(decoder, r)
 			body, _ := json.Marshal(paramsKangu.Params)
 			responseBody := kangu.Request(body, paramsKangu.Token)
-			result := pluggto.MakeResult(responseBody)
+			result = Result{
+				Value: pluggto.MakeResult(responseBody),
+			}
 			w.Header().Set("Content-Type", "application/json")
-			content, _ := json.Marshal(result)
+			content, _ := json.Marshal(result.Value)
 			w.Write(content)
 		} else {
 			paramsKangu := yampi.Parse(decoder, r)
-			body, _ := json.Marshal(paramsKangu.Params)
-			responseBody := kangu.Request(body, paramsKangu.Token)
-			result := yampi.MakeResult(responseBody)
+			if len(paramsKangu.Validator) > 0 {
+				result = Result{
+					Value: paramsKangu.Validator,
+				}
+			} else {
+				body, _ := json.Marshal(paramsKangu.Params)
+				responseBody := kangu.Request(body, paramsKangu.Token)
+				result = Result{
+					Value: yampi.MakeResult(responseBody),
+				}
+			}
 			w.Header().Set("Content-Type", "application/json")
-			content, _ := json.Marshal(result)
+			content, _ := json.Marshal(result.Value)
 			w.Write(content)
 		}
 	})
