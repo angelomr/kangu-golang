@@ -68,7 +68,6 @@ func Parse(decoder *json.Decoder, r *http.Request) ParseResult {
 		return ParseResult{
 			Validator: validator,
 		}
-
 	} else {
 		paramsKangu := MakeKangu(paramsPlatform, cepOrigem)
 
@@ -77,7 +76,6 @@ func Parse(decoder *json.Decoder, r *http.Request) ParseResult {
 			Params: paramsKangu,
 		}
 	}
-
 }
 
 func MakeKangu(paramsPlatform Request, cepOrigem string) kangu.Api {
