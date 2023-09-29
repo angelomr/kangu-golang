@@ -19,7 +19,7 @@ type Products struct {
 	Sku       string  `json:"sku"`
 	UnitPrice float64 `json:"unit_price"`
 	Quantity  string  `json:"quantity"`
-	Length    float64 `json:"lenght"`
+	Length    float64 `json:"length"`
 	Width     float64 `json:"width"`
 	Height    float64 `json:"height"`
 	Weight    float64 `json:"weight"`
@@ -45,8 +45,9 @@ type FreightItem struct {
 }
 
 type ParseResult struct {
-	Token  string
-	Params kangu.Api
+	Token     string
+	Params    kangu.Api
+	Validator []string
 }
 
 func Parse(decoder *json.Decoder, r *http.Request) ParseResult {
@@ -58,11 +59,20 @@ func Parse(decoder *json.Decoder, r *http.Request) ParseResult {
 
 	cepOrigem := paramsPlatform.OriginPostalCode
 	tokenKangu := r.Header.Get("Token")
-	paramsKangu := MakeKangu(paramsPlatform, cepOrigem)
 
-	return ParseResult{
-		Token:  tokenKangu,
-		Params: paramsKangu,
+	validator := Validate(paramsPlatform, cepOrigem, tokenKangu)
+
+	if len(validator) > 0 {
+		return ParseResult{
+			Validator: validator,
+		}
+	} else {
+		paramsKangu := MakeKangu(paramsPlatform, cepOrigem)
+
+		return ParseResult{
+			Token:  tokenKangu,
+			Params: paramsKangu,
+		}
 	}
 }
 
