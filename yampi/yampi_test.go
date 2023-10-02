@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"wsbrasil.com/simulate/kangu/kangu"
-	"wsbrasil.com/simulate/kangu/yampi"
 )
 
 func TestParse(t *testing.T) {
@@ -33,9 +32,9 @@ func TestParse(t *testing.T) {
 		Produtos:   productsResult,
 	}
 
-	var requestProducts []yampi.Products
+	var requestProducts []Products
 	quantityTemp, _ := strconv.ParseFloat(productsResult[len(productsResult)-1].Quantidade, 64)
-	requestProducts = append(requestProducts, yampi.Products{
+	requestProducts = append(requestProducts, Products{
 		Id:               1,
 		ProductId:        1,
 		Sku:              "0011",
@@ -48,13 +47,13 @@ func TestParse(t *testing.T) {
 		AvailabilityDays: 0,
 	})
 
-	requestParamsPlatform := yampi.Request{
+	requestParamsPlatform := Request{
 		Zipcode: resultKangu.CepDestino,
 		Amount:  resultKangu.VlrMerc,
 		Skus:    requestProducts,
 	}
 
-	resultado := yampi.MakeKangu(
+	resultado := MakeKangu(
 		requestParamsPlatform,
 		resultKangu.CepOrigem,
 	)
@@ -71,14 +70,14 @@ func TestParse(t *testing.T) {
 	})
 
 	t.Run("Verifica se CepDestino está Correto", func(t *testing.T) {
-		if resultado.CepDestino != resultKangu.CepDestino+"123" {
+		if resultado.CepDestino != resultKangu.CepDestino {
 			t.Errorf("resultado '%s', esperado '%s'", resultado.CepDestino, resultKangu.CepDestino)
 		}
 	})
 
 	t.Run("Verifica se VlrMerc está Correto", func(t *testing.T) {
 		if resultado.VlrMerc != resultKangu.VlrMerc {
-			t.Errorf("resultado '%s', esperado '%s'", fmt.Sprintf("%.2f", resultado.VlrMerc), fmt.Sprintf("%.2f", resultKangu.VlrMerc))
+			t.Errorf("resultado '%s', esperado '%s'", fmt.Sprintf("%.2f", resultado.VlrMerc+123), fmt.Sprintf("%.2f", resultKangu.VlrMerc))
 		}
 	})
 
