@@ -9,6 +9,7 @@ import (
 
 	"wsbrasil.com/simulate/kangu/kangu"
 	"wsbrasil.com/simulate/kangu/pluggto"
+	"wsbrasil.com/simulate/kangu/tray"
 	"wsbrasil.com/simulate/kangu/yampi"
 )
 
@@ -22,6 +23,10 @@ func main() {
 
 		decoder := json.NewDecoder(r.Body)
 		origem := r.Header.Get("Origem")
+		origemUrl := r.URL.Query().Get("origem")
+		if origemUrl != "" {
+			origem = origemUrl
+		}
 		var result Result
 
 		if origem == "pluggto" {
@@ -40,6 +45,22 @@ func main() {
 			w.Header().Set("Content-Type", "application/json")
 			content, _ := json.Marshal(result.Value)
 			w.Write(content)
+		} else if origem == "tray" {
+			paramsKangu := tray.Parse(decoder, r)
+			if len(paramsKangu.Validator) > 0 {
+				result = Result{
+					Value: paramsKangu.Validator,
+				}
+			} else {
+				body, _ := json.Marshal(paramsKangu.Params)
+				responseBody := kangu.Request(body, paramsKangu.Token)
+
+				result = Result{
+					Value: tray.MakeResult(responseBody),
+				}
+			}
+			w.Header().Set("Content-Type", "text/xml")
+			w.Write([]byte(fmt.Sprint(result.Value)))
 		} else {
 			paramsKangu := yampi.Parse(decoder, r)
 			if len(paramsKangu.Validator) > 0 {

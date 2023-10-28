@@ -28,3 +28,13 @@ Eu não tenho um acesso de Testes na PluggTo, então somente segui a documentaç
 
 ### Importante
 Caso a PluggTo não suporte a criação de variáveis no Header, podemos alterar o código para que os dados sejam enviados através de parâmetros de URL, porém, conforme dito acima, não temos acesso a PluggTo para poder fazer um teste e verificar como isso funcionaria.
+
+## Tray
+- Documentação da API - FRETE X API: (https://developers.tray.com.br/#frete-x-api)
+
+### Requisitos de negócio
+Para configurar o Gateway de Frete na loja da Tray, basta acessar o menu Configurações > Frete e envio na área administrativa da loja.
+
+Terão que ser preenchidos 2 campos:
+- URL do WebService: http://simulador.wserp.com.br
+- Token de identificação do cliente (Token da Kangu)
